@@ -1,30 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Form } from "react-bootstrap";
 import axios from "axios";
 
-const Input = () => {
+const Input = ({ user, tasks, setTasks }) => {
 	const [isChecked, setIsChecked] = useState(false);
 	const [taskName, setTaskName] = useState("");
-	const [user, setUser] = useState(null);
-	const [tasks, setTasks] = useState(null);
-
-	const fetchUser = async () => {
-		try {
-			const id = localStorage.getItem("user");
-			const response = await axios.get(`http://localhost:3000/users/${id}`);
-			const userData = response.data;
-
-			// Ensure tasks attribute is present
-			if (!userData.tasks) {
-				userData.tasks = [];
-			}
-
-			setUser(userData);
-         setTasks(userData.tasks);
-		} catch (error) {
-			console.error(error);
-		}
-	};
+	const [deadline, setDeadline] = useState("");
 
 	const handleAdd = async () => {
 		if (!user) {
@@ -32,9 +13,14 @@ const Input = () => {
 			return;
 		}
 
+		if (taskName === "") {
+			console.error("Task name is empty");
+			return;
+		}
+
 		try {
 			const id = localStorage.getItem("user");
-			const newTask = { name: taskName, user: id };
+			const newTask = { name: taskName, user: id, deadline: deadline };
 			const updatedUser = { ...user, tasks: [...user.tasks, newTask] };
 
 			// Update the user with the new task
@@ -42,17 +28,13 @@ const Input = () => {
 
 			// Update the tasks state
 			setTasks([...tasks, newTask]);
-			setUser(updatedUser);
 		} catch (error) {
 			console.error(error);
 		}
 		setTaskName("");
+		setDeadline("");
 		setIsChecked(false);
 	};
-
-	useEffect(() => {
-		fetchUser();
-	}, []);
 
 	return (
 		<Container style={{ display: "flex" }}>
@@ -65,6 +47,7 @@ const Input = () => {
 					margin: "0",
 					marginBottom: "1rem",
 				}}
+				onClick={() => setIsChecked(true)}
 			></Container>
 			{isChecked ? (
 				<Container style={{ borderBottom: "solid" }}>
@@ -92,7 +75,13 @@ const Input = () => {
 							name="taskName"
 						/>
 						<label htmlFor="deadline">Deadline </label>
-						<input type="date" name="deadline" id="deadline" />
+						<input
+							type="date"
+							value={deadline}
+							onChange={(e) => setDeadline(e.target.value)}
+							name="deadline"
+							id="deadline"
+						/>
 					</Form>
 				</Container>
 			) : (

@@ -1,16 +1,26 @@
 {
-	"users": [
-		{
-			"id": "64a8",
-			"email": "abc@gmail.com",
-			"password": "12345678",
-			"confirm_password": "12345678",
-			"tasks": [
-				{
-					"name": "dad",
-					"user": "64a8"
-				}
-			]
-		}
-	]
+  "users": [
+    {
+      "id": "64a8",
+      "email": "abc@gmail.com",
+      "password": "12345678",
+      "confirm_password": "12345678",
+      "tasks": [
+        {
+          "name": "dad",
+          "user": "64a8"
+        },
+        {
+          "name": "grocery",
+          "user": "64a8",
+          "deadline": "2024-12-13"
+        },
+        {
+          "name": "grocery",
+          "user": "64a8",
+          "deadline": "2024-12-14"
+        }
+      ]
+    }
+  ]
 }
